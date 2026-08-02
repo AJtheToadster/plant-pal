@@ -1,4 +1,11 @@
+# Node & Environment
 node_modules/
 dist/
 .env
 *.log
+
+# AI IDE & Agent Configurations
+.windsurf/
+.windsurfrules
+.claude/
+.agents/
