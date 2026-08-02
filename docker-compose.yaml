@@ -1,0 +1,19 @@
+version: '3.8'
+
+services:
+  # Database Service
+  postgres:
+    image: postgres:16-alpine
+    container_name: plant_db
+    restart: always
+    environment:
+      POSTGRES_USER: plant_admin
+      POSTGRES_PASSWORD: plant_password
+      POSTGRES_DB: plant_watering_db
+    ports:
+      - "5432:5432" # Maps laptop port 5432 to container port 5432
+    volumes:
+      - postgres_data:/var/lib/postgresql/data # Persists DB data when container restarts
+
+volumes:
+  postgres_data:
