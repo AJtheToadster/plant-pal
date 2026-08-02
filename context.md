@@ -113,8 +113,11 @@ model PlantSchedule {
 2. **Backend Setup:** `backend/` initialized with TypeScript, Express, Prisma, and `.gitignore`.
 3. **Database Migration:** Prisma schema defined & migrated via `npx prisma migrate dev --name init_schema` (configured for Prisma 7 with `prisma.config.ts`).
 4. **Data Seeding & Verification:** Created relational seeding script `prisma/seed.ts` (executed via `tsx`) populating `Controller`, `ControllerOutput`, `Plant`, and `PlantSchedule`, verified visually in **Prisma Studio**.
-5. **Express Server & First Endpoint:** Set up `src/db.ts` and `src/index.ts` with `GET /api/plants` returning nested relational data (`schedules` and `outputChannel`).
-6. **Next Steps Roadmap:**
-   - **Option A:** Configure auto-reloading dev script (`tsx --watch`) in `package.json`.
-   - **Option B:** Implement `POST /api/plants` endpoint for creating new plant profiles from JSON request bodies (`req.body`).
-   - **Option C:** Implement `POST /api/plants/:id/water` action endpoint (translating requested water volume in mL into hardware pump run duration in seconds).
+5. **Express REST API Completed:**
+   - Hot reloading dev server configured with `tsx --watch` (`npm run dev`).
+   - `GET /api/plants`: Returns all plants with nested `schedules` and `outputChannel` relational data.
+   - `POST /api/plants`: Creates new plant profiles with input validation and `201 Created` status code.
+   - `POST /api/plants/:id/water`: IoT watering action endpoint; calculates hardware pump run duration in seconds ($\text{Duration} = \frac{\text{Volume}}{\text{Flow Rate}}$) and outputs GPIO pin commands (`200 OK`).
+6. **Next Milestone Options:**
+   - **Option 1:** Add Update (`PUT/PATCH /api/plants/:id`) and Delete (`DELETE /api/plants/:id`) endpoints to complete full CRUD for plants.
+   - **Option 2:** Build the React / Vite Frontend Dashboard to display and interact with our live Express API.

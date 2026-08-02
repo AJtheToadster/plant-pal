@@ -34,6 +34,41 @@ app.post('/api/plants', async (req, res) => {
     return res.status(201).json(newPlant)
 });
 
+app.post('/api/plants/:id/water', async (req, res) => {
+    const plantId = req.params.id
+    const { volumeMl } = req.body
+
+    if (volumeMl <= 0) {
+        return res.status(400).json({
+            error: 'Volume of water requested is invalid'
+        })
+    }
+
+    const plant = await prisma.plant.findUnique({
+        where: { id: plantId },
+        include: { outputChannel: true }
+    })
+
+    if (!plant) {
+        return res.status(404).json({
+            error: 'Plant not found'
+        })
+    }
+
+    if (!plant.outputChannel) {
+        return res.status(400).json({
+            error: 'Plant has no assigned pump channel'
+        })
+    }
+
+    const durationSeconds = volumeMl / plant.outputChannel.flowRateMlPerSec
+
+    //TO-DO: Websockets/MQTT Layer, send the command to actaully pump the water
+    //io.emit('pump:trigger', {pin, duration})
+    return res.json({ gpioPinNumber: plant.outputChannel.gpioPinNumber, durationSeconds: durationSeconds })
+
+});
+
 app.listen(PORT, () => {
     console.log(`🚀 Server listening on http://localhost:${PORT}`);
 });
