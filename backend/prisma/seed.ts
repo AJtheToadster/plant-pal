@@ -31,7 +31,7 @@ async function main() {
             outputChannelId: controllerOutput.id
         }
     })
-    prisma.plant.findMany()
+
     const plantSchedule = await prisma.plantSchedule.create({
         data: {
             plantId: plant.id,
