@@ -1,6 +1,7 @@
 import express from 'express';
 import 'dotenv/config';
 import { prisma } from './db.js';
+import type { CreatePlantBody, WaterPlantParams, WaterPlantBody } from './types.js';
 
 const app = express();
 const PORT = process.env.PORT || 3000;
@@ -18,17 +19,17 @@ app.get('/api/plants', async (req, res) => {
 });
 
 app.post('/api/plants', async (req, res) => {
-    const plantName = req.body.name
-    const plantSpecies = req.body.species
-    if (!plantName) {
+    const { name, species, outputChannelId } = req.body as CreatePlantBody;
+    if (!name) {
         return res.status(400).json({
             error: 'Plant name is required'
         })
     }
     const newPlant = await prisma.plant.create({
         data: {
-            name: plantName,
-            species: plantSpecies
+            name: name,
+            species: species ?? null,
+            outputChannelId: outputChannelId ?? null
         }
     })
     return res.status(201).json(newPlant)
