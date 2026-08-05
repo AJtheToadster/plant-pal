@@ -38,10 +38,10 @@ v
 - **ORM / Query Builder:** **Prisma ORM** for type-safe database queries, schema management, and automated migrations.
 - **Development Server Host:** Local laptop (Node.js/Express) running PostgreSQL in Docker (designed for zero-friction migration to a 24/7 Raspberry Pi later).
 
-### 2. Backend API
-- **Runtime:** Node.js with **TypeScript**.
-- **Framework:** **Express.js**.
-- **Real-Time Layer:** **WebSockets** (planned) for live sensor streaming and instantaneous manual "Water Now" triggers.
+### 2. Frontend Application
+- **Framework & Tooling:** React + Vite + TypeScript (`frontend/`).
+- **Styling:** Eco-Light Botanical Theme system in CSS with **Plus Jakarta Sans** typography and 3D CSS Perspective card flips.
+- **API Service Layer:** Asynchronous `fetch()` module (`frontend/src/services/api.ts`) connecting to the Express REST API.
 
 ### 3. Edge Microcontrollers
 - **Hardware:** ESP32.
@@ -113,15 +113,19 @@ model PlantSchedule {
 2. **Backend Setup:** `backend/` initialized with TypeScript, Express, Prisma, and `.gitignore`.
 3. **Database Migration:** Prisma schema defined & migrated via `npx prisma migrate dev --name init_schema` (configured for Prisma 7 with `prisma.config.ts`).
 4. **Data Seeding & Verification:** Created relational seeding script `prisma/seed.ts` (executed via `tsx`) populating `Controller`, `ControllerOutput`, `Plant`, and `PlantSchedule`, verified visually in **Prisma Studio**.
-5. **Express REST API & Complete Plant CRUD:**
+5. **Express REST API Completed:**
    - Hot reloading dev server configured with `tsx --watch` (`npm run dev`).
    - Modular structure with `src/types.ts` (TypeScript request interfaces) and `src/tools.ts` (JSDoc documented hardware math functions).
-   - `GET /api/plants`: Returns all plants with nested `schedules` and `outputChannel` relational data.
-   - `GET /api/plants/:id`: Returns single plant profile (with 404 error handling).
-   - `POST /api/plants`: Creates new plant profiles with `201 Created` status code.
-   - `PUT /api/plants/:id`: Updates plant attributes & safety parameters preserving omitted fields.
-   - `DELETE /api/plants/:id`: Deletes plant profile by ID (with 404 error handling).
+   - Full CRUD endpoints (`GET /api/plants`, `GET /api/plants/:id`, `POST /api/plants`, `PUT /api/plants/:id`, `DELETE /api/plants/:id`).
    - `POST /api/plants/:id/water`: IoT watering action endpoint; calculates hardware pump run duration in seconds ($\text{Duration} = \frac{\text{Volume}}{\text{Flow Rate}}$) and outputs GPIO pin commands (`200 OK`).
-6. **Next Milestone Options:**
-   - **Option 1: React / Vite Frontend Dashboard** — Build the UI dashboard in `frontend/` to display plant cards, add new plants, and trigger the "Water Now" action visually in the browser.
-   - **Option 2: Hardware ESP32 Simulator & Controller Endpoints** — Build hardware registration/ping endpoints (`/api/controllers`) and a Node.js hardware simulator script to simulate real ESP32Wi-Fi hardware.
+6. **React / Vite Frontend Dashboard Completed:**
+   - Initialized Vite + React + TypeScript app in `frontend/`.
+   - Built Eco-Light design system (`index.css`) with **Plus Jakarta Sans** typography and 3D card perspective rules.
+   - Built API service layer (`frontend/src/services/api.ts`) connecting to Express endpoints.
+   - Built `<PlantCard />` with local volume state (`volumeMl`), custom input validation, and interactive **3D Card Flip deletion confirmation** (`isFlipped` state + `rotateY(180deg)` 3D CSS transform).
+   - Built `<AddPlantModal />` modal form component to register new plants into PostgreSQL via `POST /api/plants`.
+   - Built `<App />` layout with header logo ("PlantPal 🌿"), live backend status badge, and garden grid.
+7. **Immediate Next Step Options:**
+   - **Option 1: Complete In-Card 3D Flip Edit Form (`handleEdit`)** — Implement the `%` Edit button to display an edit form on the card back that calls `PUT /api/plants/:id` to update plant attributes or safety parameters.
+   - **Option 2: Hardware ESP32 Simulator & Controller Endpoints** — Build hardware registration/heartbeat endpoints (`/api/controllers`) and a Node.js simulator script to simulate real ESP32 Wi-Fi hardware.
+   - **Option 3: Real-Time Layer (WebSockets / Socket.io)** — Broadcast live watering events and moisture sensor updates between Express, Frontend, and ESP32 nodes.

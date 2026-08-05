@@ -226,25 +226,63 @@ select {
 }
 
 /* Plant Card */
+/* Outer Grid Container (Now purely a 3D perspective wrapper) */
 .plant-card {
+  perspective: 1000px;
+  min-height: 290px;
+  position: relative;
+  background: transparent;
+  border: none;
+  padding: 0;
+  box-shadow: none;
+}
+
+.card-inner {
+  position: relative;
+  width: 100%;
+  height: 100%;
+  transition: transform 0.6s cubic-bezier(0.4, 0, 0.2, 1);
+  transform-style: preserve-3d;
+}
+
+/* 180-degree rotation when flipped */
+.plant-card.flipped .card-inner {
+  transform: rotateY(180deg);
+}
+
+/* The Visual Cards (Front & Back both get background, border, padding & shadow) */
+.card-front,
+.card-back {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  backface-visibility: hidden;
   background-color: var(--bg-card);
   border: 1px solid var(--border-color);
   border-radius: var(--radius-lg);
   padding: 1.5rem;
   box-shadow: var(--shadow-sm);
-  transition: var(--transition);
   display: flex;
   flex-direction: column;
   justify-content: space-between;
-  position: relative;
-  overflow: hidden;
+  transition: var(--transition);
 }
 
-.plant-card:hover {
-  transform: translateY(-3px);
+.card-front:hover {
   box-shadow: var(--shadow-lg), var(--shadow-glow);
   border-color: var(--primary-green-border);
 }
+
+/* Back Face (Starts rotated at 180deg) */
+.card-back {
+  transform: rotateY(180deg);
+  background-color: #fef2f2;
+  /* Soft red warning card background */
+  border-color: #fecaca;
+  box-shadow: 0 4px 6px -1px rgba(239, 68, 68, 0.1);
+}
+
 
 .plant-header {
   display: flex;
@@ -428,4 +466,9 @@ select {
   font-size: 0.85rem;
   color: var(--text-muted);
   font-weight: 600;
+}
+
+.edit-delete-container {
+  display: flex;
+  column-gap: 10px;
 }

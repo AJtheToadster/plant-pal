@@ -16,8 +16,8 @@ export function App() {
     try {
       const data = await fetchPlants()
       setPlants(data);
-    } catch (error) {
-      setError(error.message || 'Failed to load plants');
+    } catch (err: any) {
+      setError(err.message || 'Failed to load plants');
     } finally {
       setIsLoading(false);
     }
@@ -38,10 +38,22 @@ export function App() {
       </header>
 
       <main className="main-content">
-        <h2>My Garden</h2>
+        <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '1rem' }}>
+          <h2>My Garden</h2>
+          <button className="btn btn-secondary" onClick={loadPlants} disabled={isLoading}>
+            🔄 Refresh
+          </button>
+        </div>
+
+        {error && (
+          <div style={{ padding: '0.75rem', background: 'var(--danger-light)', color: 'var(--danger-red)', borderRadius: 'var(--radius-md)', marginBottom: '1rem' }}>
+            ⚠️ {error}
+          </div>
+        )}
+
         <div className="plant-grid">
           {plants.map((plant) => (
-            <PlantCard key={plant.id} plant={plant} onPlantDeleted={loadPlants} />
+            <PlantCard key={plant.id} plant={plant} onPlantDeleted={loadPlants} onPlantEdited={loadPlants} />
           ))}
         </div>
         {isAddModalOpen && <AddPlantModal onClose={() => setIsAddModalOpen(false)} onPlantAdded={loadPlants} />}
