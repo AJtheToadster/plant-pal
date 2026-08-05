@@ -2,6 +2,7 @@ import { useState } from 'react';
 import { deletePlant, waterPlant } from '../services/api';
 import type { Plant } from '../types';
 import { DeleteCard } from './DeleteCard';
+import { EditCard } from './EditCard';
 
 interface PlantCardProps {
     plant: Plant;
@@ -15,6 +16,7 @@ export function PlantCard({ plant, onPlantDeleted, onPlantEdited }: PlantCardPro
     const [isDeleting, setIsDeleting] = useState<boolean>(false)
 
     const handleDelete = async () => {
+        setIsDeleting(true)
         setIsFlipped(true)
     }
     const confirmDelete = async () => {
@@ -22,6 +24,8 @@ export function PlantCard({ plant, onPlantDeleted, onPlantEdited }: PlantCardPro
         onPlantDeleted();
     }
     const handleEdit = async () => {
+        setIsDeleting(false)
+        setIsFlipped(true)
         onPlantEdited();
     }
 
@@ -69,7 +73,7 @@ export function PlantCard({ plant, onPlantDeleted, onPlantEdited }: PlantCardPro
                         </button>
                     </div>
                 </div>
-                <DeleteCard plantName={plant.name} confirmDelete={confirmDelete} setIsFlipped={setIsFlipped} />
+                {isDeleting ? <DeleteCard plantName={plant.name} confirmDelete={confirmDelete} setIsFlipped={setIsFlipped} /> : <EditCard plantName={plant.name} confirmEdit={() => { }} setIsFlipped={setIsFlipped} />}
             </div>
         </div>
     );

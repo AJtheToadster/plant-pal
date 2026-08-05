@@ -5,7 +5,7 @@ interface DeleteCardProps {
 }
 
 export function DeleteCard({ plantName, confirmDelete, setIsFlipped }: DeleteCardProps) {
-    return (<div className="card-back">
+    return (<div className="card-back card-back-delete">
         <div>
             <div style={{ fontSize: '2rem', marginBottom: '0.5rem' }}>⚠️</div>
             <h4 style={{ color: 'var(--danger-red)', fontWeight: 700 }}>Delete {plantName}?</h4>

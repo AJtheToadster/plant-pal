@@ -34,6 +34,7 @@
   --shadow-lg: 0 10px 15px -3px rgb(0 0 0 / 0.08), 0 4px 6px -4px rgb(0 0 0 / 0.04);
   --shadow-glow-green: 0 0 20px -5px rgba(22, 163, 74, 0.2);
   --shadow-glow-red: 0 0 20px -5px rgba(163, 22, 22, 0.2);
+  --shadow-glow-grey: 0 0 20px -5px rgb(151, 151, 151);
 
   --radius-sm: 8px;
   --radius-md: 14px;
@@ -275,13 +276,8 @@ select {
   border-color: var(--primary-green-border);
 }
 
-.card-back:hover {
-  box-shadow: var(--shadow-lg), var(--shadow-glow-red);
-  border-color: var(--danger-red);
-}
-
 /* Back Face (Starts rotated at 180deg) */
-.card-back {
+.card-back-delete {
   transform: rotateY(180deg);
   background-color: #fef2f2;
   /* Soft red warning card background */
@@ -289,6 +285,22 @@ select {
   box-shadow: 0 4px 6px -1px rgba(239, 68, 68, 0.1);
 }
 
+.card-back-delete:hover {
+  box-shadow: var(--shadow-lg), var(--shadow-glow-red);
+  border-color: var(--danger-red);
+}
+
+.card-back-edit {
+  transform: rotateY(180deg);
+  background-color: #e5e5e5;
+  border-color: #9a9a9a;
+  box-shadow: 0 4px 6px -1px rgba(177, 177, 177, 0.1);
+}
+
+.card-back-edit:hover {
+  box-shadow: var(--shadow-lg), var(--shadow-glow-grey);
+  border-color: var(--text-muted);
+}
 
 .plant-header {
   display: flex;
