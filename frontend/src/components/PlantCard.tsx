@@ -1,6 +1,7 @@
 import { useState } from 'react';
 import { deletePlant, waterPlant } from '../services/api';
 import type { Plant } from '../types';
+import { DeleteCard } from './DeleteCard';
 
 interface PlantCardProps {
     plant: Plant;
@@ -11,6 +12,7 @@ interface PlantCardProps {
 export function PlantCard({ plant, onPlantDeleted, onPlantEdited }: PlantCardProps) {
     const [volumeMl, setVolumeMl] = useState<number>(20)
     const [isFlipped, setIsFlipped] = useState<boolean>(false);
+    const [isDeleting, setIsDeleting] = useState<boolean>(false)
 
     const handleDelete = async () => {
         setIsFlipped(true)
@@ -67,26 +69,7 @@ export function PlantCard({ plant, onPlantDeleted, onPlantEdited }: PlantCardPro
                         </button>
                     </div>
                 </div>
-
-                <div className="card-back">
-                    <div>
-                        <div style={{ fontSize: '2rem', marginBottom: '0.5rem' }}>⚠️</div>
-                        <h4 style={{ color: 'var(--danger-red)', fontWeight: 700 }}>Delete {plant.name}?</h4>
-                        <p style={{ fontSize: '0.85rem', color: 'var(--text-muted)', marginTop: '0.25rem' }}>
-                            This action cannot be undone.
-                        </p>
-                    </div>
-                    <div style={{ display: 'flex', gap: '0.5rem', justifyContent: 'flex-end' }}>
-                        {/* Cancel flips back */}
-                        <button className="btn btn-secondary" onClick={() => setIsFlipped(false)}>
-                            Cancel
-                        </button>
-                        {/* Confirm performs deletion */}
-                        <button className="btn btn-danger" onClick={confirmDelete}>
-                            Delete
-                        </button>
-                    </div>
-                </div>
+                <DeleteCard plantName={plant.name} confirmDelete={confirmDelete} setIsFlipped={setIsFlipped} />
             </div>
         </div>
     );
