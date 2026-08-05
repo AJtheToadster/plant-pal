@@ -1,4 +1,26 @@
+import { useState, useEffect } from "react";
+import type { Plant } from "./types";
+import { fetchPlants } from "./services/api";
+
 export function App() {
+  const [plants, setPlants] = useState<Plant[]>([]);
+  const [isLoading, setIsLoading] = useState<boolean>(true);
+  const [error, setError] = useState<string | null>(null);
+
+  async function loadPlants() {
+    setIsLoading(true);
+    try {
+      const data = await fetchPlants()
+      setPlants(data);
+    } catch (error) {
+      setError(error.message || 'Failed to load plants');
+    } finally {
+      setIsLoading(false);
+    }
+  };
+
+  useEffect(() => { loadPlants(); }, []);
+
   return (
     <div>
       <header className="app-header">
@@ -12,7 +34,15 @@ export function App() {
 
       <main className="main-content">
         <h2>My Garden</h2>
-        <p style={{ color: 'var(--text-muted)' }}>Building our interactive React dashboard...</p>
+        <div className="plant-grid">
+          {plants.map((plant) => (
+            <div key={plant.id} className="plant-card">
+              <h3>{plant.name}</h3>
+              <p>{plant.species || 'No species'}</p>
+            </div>
+          ))}
+        </div>
+
       </main>
     </div>
   );
