@@ -2,43 +2,52 @@
 
 :root {
   --font-family: 'Plus Jakarta Sans', system-ui, -apple-system, sans-serif;
-  
+
   /* Color Palette - Eco Light Theme */
   --bg-main: #f4f7f4;
   --bg-card: #ffffff;
   --bg-card-hover: #fcfdfc;
-  
+
   --border-color: #e2e9e1;
   --border-focus: #16a34a;
-  
+
   --primary-green: #16a34a;
   --primary-green-hover: #15803d;
   --primary-green-light: #f0fdf4;
   --primary-green-border: #bbf7d0;
-  
+
   --water-blue: #0284c7;
   --water-blue-hover: #0369a1;
   --water-blue-light: #f0f9ff;
   --water-blue-border: #bae6fd;
-  
+
   --danger-red: #ef4444;
   --danger-light: #fef2f2;
-  
+
   --text-main: #0f172a;
   --text-muted: #64748b;
   --text-subtle: #94a3b8;
-  
+
   --shadow-sm: 0 1px 2px 0 rgb(0 0 0 / 0.05);
   --shadow-md: 0 4px 6px -1px rgb(0 0 0 / 0.05), 0 2px 4px -2px rgb(0 0 0 / 0.05);
   --shadow-lg: 0 10px 15px -3px rgb(0 0 0 / 0.08), 0 4px 6px -4px rgb(0 0 0 / 0.04);
   --shadow-glow: 0 0 20px -5px rgba(22, 163, 74, 0.2);
-  
+
   --radius-sm: 8px;
   --radius-md: 14px;
   --radius-lg: 20px;
   --radius-full: 9999px;
-  
+
   --transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+button:disabled {
+  cursor: not-allowed;
+  background-color: var(--bg-main) !important;
+  color: var(--text-muted) !important;
+  border-color: var(--border-color) !important;
+  box-shadow: none !important;
+  transform: none !important;
 }
 
 * {
@@ -63,7 +72,8 @@ button {
   background: none;
 }
 
-input, select {
+input,
+select {
   font-family: inherit;
 }
 
@@ -369,11 +379,40 @@ input, select {
 
 /* Animations */
 @keyframes fadeIn {
-  from { opacity: 0; }
-  to { opacity: 1; }
+  from {
+    opacity: 0;
+  }
+
+  to {
+    opacity: 1;
+  }
 }
 
 @keyframes scaleIn {
-  from { opacity: 0; transform: scale(0.95); }
-  to { opacity: 1; transform: scale(1); }
+  from {
+    opacity: 0;
+    transform: scale(0.95);
+  }
+
+  to {
+    opacity: 1;
+    transform: scale(1);
+  }
+}
+
+.volume-input-group {
+  display: flex;
+  align-items: center;
+  gap: 0.4rem;
+}
+
+.volume-input {
+  width: 70px;
+  padding: 0.35rem 0.5rem;
+}
+
+.unit-label {
+  font-size: 0.85rem;
+  color: var(--text-muted);
+  font-weight: 600;
 }

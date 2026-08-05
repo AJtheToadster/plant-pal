@@ -1,6 +1,7 @@
 import { useState, useEffect } from "react";
 import type { Plant } from "./types";
 import { fetchPlants } from "./services/api";
+import { PlantCard } from "./components/PlantCard";
 
 export function App() {
   const [plants, setPlants] = useState<Plant[]>([]);
@@ -36,10 +37,7 @@ export function App() {
         <h2>My Garden</h2>
         <div className="plant-grid">
           {plants.map((plant) => (
-            <div key={plant.id} className="plant-card">
-              <h3>{plant.name}</h3>
-              <p>{plant.species || 'No species'}</p>
-            </div>
+            <PlantCard key={plant.id} plant={plant} />
           ))}
         </div>
 
