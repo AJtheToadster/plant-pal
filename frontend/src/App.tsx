@@ -2,11 +2,14 @@ import { useState, useEffect } from "react";
 import type { Plant } from "./types";
 import { fetchPlants } from "./services/api";
 import { PlantCard } from "./components/PlantCard";
+import { AddPlantModal } from "./components/AddPlantModal";
 
 export function App() {
   const [plants, setPlants] = useState<Plant[]>([]);
   const [isLoading, setIsLoading] = useState<boolean>(true);
   const [error, setError] = useState<string | null>(null);
+  const [isAddModalOpen, setIsAddModalOpen] = useState(false);
+
 
   async function loadPlants() {
     setIsLoading(true);
@@ -30,6 +33,7 @@ export function App() {
             <div className="logo-icon">🌿</div>
             <h1 className="logo-title">PlantPal</h1>
           </div>
+          <button className="btn btn-primary" onClick={() => setIsAddModalOpen(true)}>＋ Add Plant</button>
         </div>
       </header>
 
@@ -40,7 +44,7 @@ export function App() {
             <PlantCard key={plant.id} plant={plant} />
           ))}
         </div>
-
+        {isAddModalOpen && <AddPlantModal onClose={() => setIsAddModalOpen(false)} onPlantAdded={loadPlants} />}
       </main>
     </div>
   );
