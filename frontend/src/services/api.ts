@@ -42,8 +42,6 @@ export async function waterPlant(plantId: string, volumeMl: number): Promise<Wat
  * @returns {Promise<Plant>} - The created plant
  */
 export async function createPlant(name: string, species?: string): Promise<Plant> {
-    // Pass body: JSON.stringify(data)
-    // Handle !response.ok errors and return response.json()!
     const response = await fetch(`${API_BASE_URL}/plants/`, {
         method: 'POST',
         headers: {
@@ -56,5 +54,22 @@ export async function createPlant(name: string, species?: string): Promise<Plant
         throw new Error(errorData.error || `Failed to create plant (Status: ${response.status})`);
     }
     console.log(`${name} has been created!`)
+    return response.json();
+}
+
+/**
+ * Deletes a plant profile in PostgreSQL.
+ * @param {string} plantId - The id of the plant to be deleted
+ * @returns {Promise<Plant>} - The deleted plant
+ */
+export async function deletePlant(plantId: string): Promise<Plant> {
+    const response = await fetch(`${API_BASE_URL}/plants/${plantId}`, {
+        method: 'DELETE'
+    })
+    if (!response.ok) {
+        const errorData = await response.json().catch(() => ({}));
+        throw new Error(errorData.error || `Failed to delete plant (Status: ${response.status})`);
+    }
+    console.log(`plant id ${plantId} has been deleted!`)
     return response.json();
 }

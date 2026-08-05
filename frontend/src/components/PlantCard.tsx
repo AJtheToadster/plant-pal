@@ -1,17 +1,25 @@
 import { useState } from 'react';
-import { waterPlant } from '../services/api';
+import { deletePlant, waterPlant } from '../services/api';
 import type { Plant } from '../types';
 
 interface PlantCardProps {
     plant: Plant;
+    onPlantDeleted: () => void;
 }
 
-export function PlantCard({ plant }: PlantCardProps) {
+export function PlantCard({ plant, onPlantDeleted }: PlantCardProps) {
     const [volumeMl, setVolumeMl] = useState<number>(20)
+    const handleDelete = async () => {
+        if (!window.confirm(`Are you sure you want to delete ${plant.name}? This can't be undone!`)) return;
+        await deletePlant(plant.id);
+        onPlantDeleted();
+    }
+
     return (
         <div className="plant-card">
             <div className="plant-header">
                 <div className="plant-avatar">🌿</div>
+                <button className="btn btn-delete" onClick={handleDelete}>X</button>
             </div>
 
             <h3 className="plant-name">{plant.name}</h3>

@@ -41,7 +41,7 @@ export function App() {
         <h2>My Garden</h2>
         <div className="plant-grid">
           {plants.map((plant) => (
-            <PlantCard key={plant.id} plant={plant} />
+            <PlantCard key={plant.id} plant={plant} onPlantDeleted={loadPlants} />
           ))}
         </div>
         {isAddModalOpen && <AddPlantModal onClose={() => setIsAddModalOpen(false)} onPlantAdded={loadPlants} />}

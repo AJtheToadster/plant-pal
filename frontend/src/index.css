@@ -22,6 +22,7 @@
   --water-blue-border: #bae6fd;
 
   --danger-red: #ef4444;
+  --danger-red-hover: #bc1616;
   --danger-light: #fef2f2;
 
   --text-main: #0f172a;
@@ -169,6 +170,18 @@ select {
 
 .btn-primary:hover {
   background-color: var(--primary-green-hover);
+  transform: translateY(-1px);
+  box-shadow: var(--shadow-md);
+}
+
+.btn-delete {
+  background-color: var(--danger-red);
+  color: white;
+  box-shadow: var(--shadow-sm);
+}
+
+.btn-delete:hover {
+  background-color: var(--danger-red-hover);
   transform: translateY(-1px);
   box-shadow: var(--shadow-md);
 }
