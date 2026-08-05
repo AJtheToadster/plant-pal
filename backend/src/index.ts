@@ -3,10 +3,12 @@ import 'dotenv/config';
 import { prisma } from './db.js';
 import type { CreatePlantBody, WaterPlantParams, WaterPlantBody, PlantIdParam, UpdatePlantBody } from './types.js';
 import { calculateWateringDuration } from './tools.js'
+import cors from 'cors';
 
 const app = express();
 const PORT = process.env.PORT || 3000;
 
+app.use(cors());
 app.use(express.json());
 
 app.get('/api/plants', async (req, res) => {

@@ -113,11 +113,15 @@ model PlantSchedule {
 2. **Backend Setup:** `backend/` initialized with TypeScript, Express, Prisma, and `.gitignore`.
 3. **Database Migration:** Prisma schema defined & migrated via `npx prisma migrate dev --name init_schema` (configured for Prisma 7 with `prisma.config.ts`).
 4. **Data Seeding & Verification:** Created relational seeding script `prisma/seed.ts` (executed via `tsx`) populating `Controller`, `ControllerOutput`, `Plant`, and `PlantSchedule`, verified visually in **Prisma Studio**.
-5. **Express REST API Completed:**
+5. **Express REST API & Complete Plant CRUD:**
    - Hot reloading dev server configured with `tsx --watch` (`npm run dev`).
+   - Modular structure with `src/types.ts` (TypeScript request interfaces) and `src/tools.ts` (JSDoc documented hardware math functions).
    - `GET /api/plants`: Returns all plants with nested `schedules` and `outputChannel` relational data.
-   - `POST /api/plants`: Creates new plant profiles with input validation and `201 Created` status code.
+   - `GET /api/plants/:id`: Returns single plant profile (with 404 error handling).
+   - `POST /api/plants`: Creates new plant profiles with `201 Created` status code.
+   - `PUT /api/plants/:id`: Updates plant attributes & safety parameters preserving omitted fields.
+   - `DELETE /api/plants/:id`: Deletes plant profile by ID (with 404 error handling).
    - `POST /api/plants/:id/water`: IoT watering action endpoint; calculates hardware pump run duration in seconds ($\text{Duration} = \frac{\text{Volume}}{\text{Flow Rate}}$) and outputs GPIO pin commands (`200 OK`).
 6. **Next Milestone Options:**
-   - **Option 1:** Add Update (`PUT/PATCH /api/plants/:id`) and Delete (`DELETE /api/plants/:id`) endpoints to complete full CRUD for plants.
-   - **Option 2:** Build the React / Vite Frontend Dashboard to display and interact with our live Express API.
+   - **Option 1: React / Vite Frontend Dashboard** — Build the UI dashboard in `frontend/` to display plant cards, add new plants, and trigger the "Water Now" action visually in the browser.
+   - **Option 2: Hardware ESP32 Simulator & Controller Endpoints** — Build hardware registration/ping endpoints (`/api/controllers`) and a Node.js hardware simulator script to simulate real ESP32Wi-Fi hardware.
