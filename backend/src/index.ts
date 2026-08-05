@@ -1,7 +1,8 @@
 import express from 'express';
 import 'dotenv/config';
 import { prisma } from './db.js';
-import type { CreatePlantBody, WaterPlantParams, WaterPlantBody } from './types.js';
+import type { CreatePlantBody, WaterPlantParams, WaterPlantBody, PlantIdParam, UpdatePlantBody } from './types.js';
+import { calculateWateringDuration } from './tools.js'
 
 const app = express();
 const PORT = process.env.PORT || 3000;
@@ -17,6 +18,17 @@ app.get('/api/plants', async (req, res) => {
     })
     res.json(plants)
 });
+
+app.get('/api/plants/:id', async (req, res) => {
+    const { id } = req.params as PlantIdParam;
+    const plant = await prisma.plant.findUnique({
+        where: { id: id }
+    })
+    if (!plant) {
+        return res.status(404).json({ error: 'Plant not found' })
+    }
+    res.json(plant)
+})
 
 app.post('/api/plants', async (req, res) => {
     const { name, species, outputChannelId } = req.body as CreatePlantBody;
@@ -36,8 +48,8 @@ app.post('/api/plants', async (req, res) => {
 });
 
 app.post('/api/plants/:id/water', async (req, res) => {
-    const plantId = req.params.id
-    const { volumeMl } = req.body
+    const { id } = req.params as WaterPlantParams;
+    const { volumeMl } = req.body as WaterPlantBody;
 
     if (volumeMl <= 0) {
         return res.status(400).json({
@@ -46,7 +58,7 @@ app.post('/api/plants/:id/water', async (req, res) => {
     }
 
     const plant = await prisma.plant.findUnique({
-        where: { id: plantId },
+        where: { id: id },
         include: { outputChannel: true }
     })
 
@@ -62,13 +74,40 @@ app.post('/api/plants/:id/water', async (req, res) => {
         })
     }
 
-    const durationSeconds = volumeMl / plant.outputChannel.flowRateMlPerSec
+    const durationSeconds = calculateWateringDuration(volumeMl, plant.outputChannel.flowRateMlPerSec)
 
     //TO-DO: Websockets/MQTT Layer, send the command to actaully pump the water
     //io.emit('pump:trigger', {pin, duration})
     return res.json({ gpioPinNumber: plant.outputChannel.gpioPinNumber, durationSeconds: durationSeconds })
 
 });
+
+app.put('/api/plants/:id', async (req, res) => {
+    const { id } = req.params as PlantIdParam;
+    const body = req.body as UpdatePlantBody;
+
+    try {
+        const updatedPlant = await prisma.plant.update({
+            where: { id },
+            data: body
+        });
+        return res.json(updatedPlant);
+    } catch (error) {
+        return res.status(404).json({ error: 'Plant not found' });
+    }
+});
+
+app.delete('/api/plants/:id', async (req, res) => {
+    const { id } = req.params as PlantIdParam;
+    try {
+        const deletedPlant = await prisma.plant.delete({
+            where: { id },
+        });
+        return res.json(deletedPlant);
+    } catch (error) {
+        return res.status(404).json({ error: 'Plant not found' });
+    }
+})
 
 app.listen(PORT, () => {
     console.log(`🚀 Server listening on http://localhost:${PORT}`);

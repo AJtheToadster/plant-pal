@@ -13,3 +13,18 @@ export interface WaterPlantParams {
 export interface WaterPlantBody {
     volumeMl: number;
 }
+
+// Interface for dynamic :id parameter in GET / PUT / DELETE
+export interface PlantIdParam {
+    id: string;
+}
+
+// Interface for updating a plant (PUT /api/plants/:id)
+export interface UpdatePlantBody {
+    name?: string;
+    species?: string;
+    outputChannelId?: string | null;
+    safetyTriggerEnabled?: boolean;
+    moistureThresholdPct?: number;
+    safetyWaterVolumeMl?: number;
+}
