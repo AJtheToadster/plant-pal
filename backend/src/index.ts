@@ -84,20 +84,121 @@ app.post('/api/plants/:id/water', async (req, res) => {
 
 });
 
-app.put('/api/plants/:id', async (req, res) => {
-    const { id } = req.params as PlantIdParam;
-    const body = req.body as UpdatePlantBody;
-
+app.get('/api/controllers', async (req, res) => {
     try {
-        const updatedPlant = await prisma.plant.update({
-            where: { id },
-            data: body
+        const controllers = await prisma.controller.findMany({
+            include: { outputs: true }
         });
-        return res.json(updatedPlant);
-    } catch (error) {
-        return res.status(404).json({ error: 'Plant not found' });
+        return res.json(controllers);
+    } catch (error: any) {
+        return res.status(500).json({ error: 'Failed to fetch controllers' });
     }
 });
+
+app.put('/api/plants/:id', async (req, res) => {
+    const { id } = req.params as PlantIdParam;
+    const { name, species, gpioPinNumber, controllerId, schedule } = req.body as UpdatePlantBody;
+
+    try {
+        const existingPlant = await prisma.plant.findUnique({
+            where: { id },
+            include: { outputChannel: true, schedules: true }
+        });
+
+        if (!existingPlant) {
+            return res.status(404).json({ error: 'Plant not found' });
+        }
+
+        let outputChannelId = existingPlant.outputChannelId;
+
+        // Handle GPIO pin or Controller update
+        if (gpioPinNumber !== undefined && gpioPinNumber !== null && gpioPinNumber > 0) {
+            if (existingPlant.outputChannel) {
+                await prisma.controllerOutput.update({
+                    where: { id: existingPlant.outputChannel.id },
+                    data: {
+                        gpioPinNumber: Number(gpioPinNumber),
+                        ...(controllerId ? { controllerId } : {})
+                    }
+                });
+            } else {
+                let targetControllerId = controllerId;
+                if (!targetControllerId) {
+                    const firstController = await prisma.controller.findFirst();
+                    if (firstController) {
+                        targetControllerId = firstController.id;
+                    } else {
+                        const newController = await prisma.controller.create({
+                            data: {
+                                name: "ESP32 Controller",
+                                deviceMacAddress: "AA:BB:CC:DD:EE:FF"
+                            }
+                        });
+                        targetControllerId = newController.id;
+                    }
+                }
+                const newOutput = await prisma.controllerOutput.create({
+                    data: {
+                        controllerId: targetControllerId,
+                        gpioPinNumber: Number(gpioPinNumber)
+                    }
+                });
+                outputChannelId = newOutput.id;
+            }
+        }
+
+        // Update basic plant fields
+        await prisma.plant.update({
+            where: { id },
+            data: {
+                ...(name !== undefined ? { name } : {}),
+                ...(species !== undefined ? { species: species || null } : {}),
+                outputChannelId
+            }
+        });
+
+        // Handle Schedule update
+        if (schedule) {
+            const existingSchedule = existingPlant.schedules[0];
+            if (existingSchedule) {
+                await prisma.plantSchedule.update({
+                    where: { id: existingSchedule.id },
+                    data: {
+                        ...(schedule.scheduledTime ? { scheduledTime: schedule.scheduledTime } : {}),
+                        ...(schedule.targetVolumeMl !== undefined ? { targetVolumeMl: Number(schedule.targetVolumeMl) } : {}),
+                        ...(schedule.daysOfWeek ? { daysOfWeek: schedule.daysOfWeek } : {}),
+                        ...(schedule.isActive !== undefined ? { isActive: schedule.isActive } : {})
+                    }
+                });
+            } else {
+                await prisma.plantSchedule.create({
+                    data: {
+                        plantId: id,
+                        scheduledTime: schedule.scheduledTime || "08:00",
+                        targetVolumeMl: Number(schedule.targetVolumeMl) || 250,
+                        daysOfWeek: schedule.daysOfWeek || [1, 3, 5],
+                        isActive: schedule.isActive ?? true
+                    }
+                });
+            }
+        }
+
+        // Return updated plant with all relations included
+        const updatedPlant = await prisma.plant.findUnique({
+            where: { id },
+            include: {
+                outputChannel: { include: { controller: true } },
+                schedules: true
+            }
+        });
+
+        return res.json(updatedPlant);
+    } catch (error: any) {
+        console.error("Failed to update plant:", error);
+        return res.status(500).json({ error: error.message || 'Failed to update plant' });
+    }
+});
+
 
 app.delete('/api/plants/:id', async (req, res) => {
     const { id } = req.params as PlantIdParam;

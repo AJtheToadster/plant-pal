@@ -19,12 +19,23 @@ export interface PlantIdParam {
     id: string;
 }
 
+export interface ScheduleUpdatePayload {
+    scheduledTime?: string;
+    targetVolumeMl?: number;
+    daysOfWeek?: number[];
+    isActive?: boolean;
+}
+
 // Interface for updating a plant (PUT /api/plants/:id)
 export interface UpdatePlantBody {
     name?: string;
     species?: string;
     outputChannelId?: string | null;
+    gpioPinNumber?: number;
+    controllerId?: string;
+    schedule?: ScheduleUpdatePayload;
     safetyTriggerEnabled?: boolean;
     moistureThresholdPct?: number;
     safetyWaterVolumeMl?: number;
 }
+

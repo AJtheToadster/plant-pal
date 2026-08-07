@@ -23,11 +23,10 @@ export function PlantCard({ plant, onPlantDeleted, onPlantEdited }: PlantCardPro
         await deletePlant(plant.id);
         onPlantDeleted();
     }
-    const handleEdit = async () => {
-        setIsDeleting(false)
-        setIsFlipped(true)
-        onPlantEdited();
-    }
+    const handleEdit = () => {
+        setIsDeleting(false);
+        setIsFlipped(true);
+    };
 
     return (
         <div className={`plant-card ${isFlipped ? 'flipped' : ''}`}>
@@ -36,8 +35,8 @@ export function PlantCard({ plant, onPlantDeleted, onPlantEdited }: PlantCardPro
                     <div className="plant-header">
                         <div className="plant-avatar">🌿</div>
                         <div className='edit-delete-container'>
-                            <button className="btn btn-primary" onClick={handleEdit}>%</button>
-                            <button className="btn btn-delete" onClick={handleDelete}>X</button>
+                            <button className="btn btn-secondary" onClick={handleEdit}>Edit</button>
+                            <button className="btn btn-delete" onClick={handleDelete}>Delete</button>
                         </div>
                     </div>
 
@@ -73,8 +72,13 @@ export function PlantCard({ plant, onPlantDeleted, onPlantEdited }: PlantCardPro
                         </button>
                     </div>
                 </div>
-                {isDeleting ? <DeleteCard plantName={plant.name} confirmDelete={confirmDelete} setIsFlipped={setIsFlipped} /> : <EditCard plantName={plant.name} confirmEdit={() => { }} setIsFlipped={setIsFlipped} />}
+                {isDeleting ? (
+                    <DeleteCard plantName={plant.name} confirmDelete={confirmDelete} setIsFlipped={setIsFlipped} />
+                ) : (
+                    <EditCard plant={plant} setIsFlipped={setIsFlipped} onPlantEdited={onPlantEdited} />
+                )}
             </div>
         </div>
     );
+
 }

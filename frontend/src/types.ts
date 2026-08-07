@@ -1,9 +1,18 @@
+export interface Controller {
+  id: string;
+  name: string;
+  deviceMacAddress: string;
+  isOnline: boolean;
+  outputs?: ControllerOutput[];
+}
+
 export interface ControllerOutput {
   id: string;
   controllerId: string;
   gpioPinNumber: number;
   flowRateMlPerSec: number;
 }
+
 
 export interface PlantSchedule {
   id: string;

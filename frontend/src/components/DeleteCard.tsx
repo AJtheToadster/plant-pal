@@ -1,8 +1,9 @@
 interface DeleteCardProps {
-    plantName: String;
+    plantName: string;
     confirmDelete: () => void;
-    setIsFlipped: (boolean) => void;
+    setIsFlipped: (flipped: boolean) => void;
 }
+
 
 export function DeleteCard({ plantName, confirmDelete, setIsFlipped }: DeleteCardProps) {
     return (<div className="card-back card-back-delete">

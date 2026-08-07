@@ -1,5 +1,8 @@
 @import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap');
 
+/* ==========================================
+   1. DESIGN TOKENS
+   ========================================== */
 :root {
   --font-family: 'Plus Jakarta Sans', system-ui, -apple-system, sans-serif;
 
@@ -7,6 +10,7 @@
   --bg-main: #f4f7f4;
   --bg-card: #ffffff;
   --bg-card-hover: #fcfdfc;
+  --bg-secondary: #e2e8f0;
 
   --border-color: #e2e9e1;
   --border-focus: #16a34a;
@@ -34,7 +38,6 @@
   --shadow-lg: 0 10px 15px -3px rgb(0 0 0 / 0.08), 0 4px 6px -4px rgb(0 0 0 / 0.04);
   --shadow-glow-green: 0 0 20px -5px rgba(22, 163, 74, 0.2);
   --shadow-glow-red: 0 0 20px -5px rgba(163, 22, 22, 0.2);
-  --shadow-glow-grey: 0 0 20px -5px rgb(151, 151, 151);
 
   --radius-sm: 8px;
   --radius-md: 14px;
@@ -44,15 +47,9 @@
   --transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
 }
 
-button:disabled {
-  cursor: not-allowed;
-  background-color: var(--bg-main) !important;
-  color: var(--text-muted) !important;
-  border-color: var(--border-color) !important;
-  box-shadow: none !important;
-  transform: none !important;
-}
-
+/* ==========================================
+   2. BASE & RESET
+   ========================================== */
 * {
   box-sizing: border-box;
   margin: 0;
@@ -68,91 +65,51 @@ body {
   min-height: 100vh;
 }
 
-button {
+button, input, select {
   font-family: inherit;
+}
+
+button {
   cursor: pointer;
   border: none;
   background: none;
 }
 
-input,
-select {
-  font-family: inherit;
+button:disabled {
+  cursor: not-allowed;
+  background-color: var(--bg-main) !important;
+  color: var(--text-muted) !important;
+  border-color: var(--border-color) !important;
+  box-shadow: none !important;
+  transform: none !important;
 }
 
-/* App Container Layout */
-.app-header {
-  background-color: var(--bg-card);
-  border-bottom: 1px solid var(--border-color);
-  position: sticky;
-  top: 0;
-  z-index: 40;
-  backdrop-filter: blur(8px);
-}
-
-.header-container {
-  max-width: 1200px;
-  margin: 0 auto;
-  padding: 1.25rem 1.5rem;
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-}
-
-.logo-group {
-  display: flex;
-  align-items: center;
-  gap: 0.75rem;
-}
-
-.logo-icon {
-  width: 42px;
-  height: 42px;
-  background: var(--primary-green-light);
-  border: 1px solid var(--primary-green-border);
-  border-radius: var(--radius-md);
+/* Common Flex Utility Helpers */
+.flex-center,
+.logo-icon,
+.plant-avatar,
+.close-btn,
+.day-pill,
+.modal-overlay {
   display: flex;
   align-items: center;
   justify-content: center;
-  font-size: 1.5rem;
 }
 
-.logo-title {
-  font-size: 1.35rem;
-  font-weight: 800;
-  color: var(--text-main);
-  letter-spacing: -0.02em;
-}
-
-.logo-badge {
-  font-size: 0.75rem;
-  font-weight: 600;
-  background: var(--primary-green-light);
-  color: var(--primary-green);
-  padding: 0.2rem 0.6rem;
-  border-radius: var(--radius-full);
-  border: 1px solid var(--primary-green-border);
-}
-
-.main-content {
-  max-width: 1200px;
-  margin: 0 auto;
-  padding: 2.5rem 1.5rem;
-}
-
-.dashboard-actions {
+.header-container,
+.dashboard-actions,
+.plant-header,
+.card-footer,
+.modal-header,
+.edit-card-header {
   display: flex;
   justify-content: space-between;
   align-items: center;
-  margin-bottom: 2rem;
 }
 
-.section-title {
-  font-size: 1.5rem;
-  font-weight: 700;
-  letter-spacing: -0.02em;
-}
-
+/* ==========================================
+   3. BUTTONS & BADGES
+   ========================================== */
 .btn {
   display: inline-flex;
   align-items: center;
@@ -169,44 +126,19 @@ select {
   color: white;
   box-shadow: var(--shadow-sm);
 }
-
-.btn-primary:hover {
-  background-color: var(--primary-green-hover);
-  transform: translateY(-1px);
-  box-shadow: var(--shadow-md);
-}
+.btn-primary:hover { background-color: var(--primary-green-hover); }
 
 .btn-delete {
   background-color: var(--danger-red);
   color: white;
   box-shadow: var(--shadow-sm);
 }
+.btn-delete:hover { background-color: var(--danger-red-hover); }
 
+.btn-primary:hover,
 .btn-delete:hover {
-  background-color: var(--danger-red-hover);
   transform: translateY(-1px);
   box-shadow: var(--shadow-md);
-}
-
-.btn-water {
-  background-color: var(--water-blue-light);
-  color: var(--water-blue);
-  border: 1px solid var(--water-blue-border);
-}
-
-.btn-water:hover {
-  background-color: var(--water-blue);
-  color: white;
-}
-
-.btn-danger {
-  background-color: var(--danger-light);
-  color: var(--danger-red);
-}
-
-.btn-danger:hover {
-  background-color: var(--danger-red);
-  color: white;
 }
 
 .btn-secondary {
@@ -214,21 +146,105 @@ select {
   color: var(--text-muted);
   border: 1px solid var(--border-color);
 }
-
 .btn-secondary:hover {
-  background-color: #e2e8f0;
+  background-color: var(--bg-secondary);
   color: var(--text-main);
 }
 
-/* Plant Grid Layout */
+.btn-danger {
+  background-color: var(--danger-light);
+  color: var(--danger-red);
+}
+.btn-danger:hover {
+  background-color: var(--danger-red);
+  color: white;
+}
+
+.btn-water {
+  background-color: var(--water-blue-light);
+  color: var(--water-blue);
+  border: 1px solid var(--water-blue-border);
+}
+.btn-water:hover {
+  background-color: var(--water-blue);
+  color: white;
+}
+
+.logo-badge {
+  font-size: 0.75rem;
+  font-weight: 600;
+  background: var(--primary-green-light);
+  color: var(--primary-green);
+  padding: 0.2rem 0.6rem;
+  border-radius: var(--radius-full);
+  border: 1px solid var(--primary-green-border);
+}
+
+/* ==========================================
+   4. LAYOUT COMPONENTS
+   ========================================== */
+.app-header {
+  background-color: var(--bg-card);
+  border-bottom: 1px solid var(--border-color);
+  position: sticky;
+  top: 0;
+  z-index: 40;
+  backdrop-filter: blur(8px);
+}
+
+.header-container {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 1.25rem 1.5rem;
+}
+
+.logo-group {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+}
+
+.logo-icon {
+  width: 42px;
+  height: 42px;
+  background: var(--primary-green-light);
+  border: 1px solid var(--primary-green-border);
+  border-radius: var(--radius-md);
+  font-size: 1.5rem;
+}
+
+.logo-title {
+  font-size: 1.35rem;
+  font-weight: 800;
+  color: var(--text-main);
+  letter-spacing: -0.02em;
+}
+
+.main-content {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 2.5rem 1.5rem;
+}
+
+.dashboard-actions {
+  margin-bottom: 2rem;
+}
+
+.section-title {
+  font-size: 1.5rem;
+  font-weight: 700;
+  letter-spacing: -0.02em;
+}
+
 .plant-grid {
   display: grid;
   grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
   gap: 1.5rem;
 }
 
-/* Plant Card */
-/* Outer Grid Container (Now purely a 3D perspective wrapper) */
+/* ==========================================
+   5. PLANT CARDS & 3D FLIP SYSTEM
+   ========================================== */
 .plant-card {
   perspective: 1000px;
   min-height: 290px;
@@ -247,12 +263,10 @@ select {
   transform-style: preserve-3d;
 }
 
-/* 180-degree rotation when flipped */
 .plant-card.flipped .card-inner {
   transform: rotateY(180deg);
 }
 
-/* The Visual Cards (Front & Back both get background, border, padding & shadow) */
 .card-front,
 .card-back {
   position: absolute;
@@ -276,35 +290,30 @@ select {
   border-color: var(--primary-green-border);
 }
 
-/* Back Face (Starts rotated at 180deg) */
-.card-back-delete {
+.card-back {
   transform: rotateY(180deg);
-  background-color: #fef2f2;
-  /* Soft red warning card background */
+}
+
+.card-back-delete {
+  background-color: var(--danger-light);
   border-color: #fecaca;
   box-shadow: 0 4px 6px -1px rgba(239, 68, 68, 0.1);
 }
-
 .card-back-delete:hover {
   box-shadow: var(--shadow-lg), var(--shadow-glow-red);
   border-color: var(--danger-red);
 }
 
 .card-back-edit {
-  transform: rotateY(180deg);
-  background-color: #e5e5e5;
-  border-color: #9a9a9a;
-  box-shadow: 0 4px 6px -1px rgba(177, 177, 177, 0.1);
+  padding: 1rem 1.25rem;
 }
-
 .card-back-edit:hover {
-  box-shadow: var(--shadow-lg), var(--shadow-glow-grey);
-  border-color: var(--text-muted);
+  box-shadow: var(--shadow-lg), var(--shadow-glow-green);
+  border-color: var(--primary-green-border);
 }
 
+/* Card Content Details */
 .plant-header {
-  display: flex;
-  justify-content: space-between;
   align-items: flex-start;
   margin-bottom: 1rem;
 }
@@ -314,11 +323,13 @@ select {
   height: 52px;
   background: var(--primary-green-light);
   border-radius: var(--radius-md);
-  display: flex;
-  align-items: center;
-  justify-content: center;
   font-size: 1.75rem;
   border: 1px solid var(--primary-green-border);
+}
+
+.edit-delete-container {
+  display: flex;
+  column-gap: 10px;
 }
 
 .plant-name {
@@ -357,85 +368,31 @@ select {
   margin-top: 1.5rem;
   padding-top: 1rem;
   border-top: 1px solid var(--border-color);
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
 }
 
-/* Modal Overlay */
-.modal-overlay {
-  position: fixed;
-  inset: 0;
-  background-color: rgba(15, 23, 42, 0.4);
-  backdrop-filter: blur(4px);
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  z-index: 50;
-  padding: 1rem;
-  animation: fadeIn 0.15s ease-out;
-}
-
-.modal-content {
-  background-color: var(--bg-card);
-  border-radius: var(--radius-lg);
-  box-shadow: var(--shadow-lg);
-  width: 100%;
-  max-width: 480px;
-  padding: 2rem;
-  border: 1px solid var(--border-color);
-  animation: scaleIn 0.15s ease-out;
-}
-
-.modal-header {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  margin-bottom: 1.5rem;
-}
-
-.modal-title {
-  font-size: 1.25rem;
-  font-weight: 700;
-}
-
-.close-btn {
-  font-size: 1.25rem;
-  color: var(--text-muted);
-  width: 32px;
-  height: 32px;
-  border-radius: var(--radius-full);
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  transition: var(--transition);
-}
-
-.close-btn:hover {
-  background: var(--bg-main);
-  color: var(--text-main);
-}
-
+/* ==========================================
+   6. FORM CONTROLS & EDIT CARD STYLES
+   ========================================== */
 .form-group {
-  margin-bottom: 1.25rem;
+  margin-bottom: 1rem;
 }
 
 .form-label {
   display: block;
   font-size: 0.85rem;
   font-weight: 600;
-  margin-bottom: 0.5rem;
+  margin-bottom: 0.35rem;
   color: var(--text-main);
 }
 
 .form-input {
   width: 100%;
-  padding: 0.75rem 1rem;
+  padding: 0.65rem 0.85rem;
   border-radius: var(--radius-md);
   border: 1px solid var(--border-color);
   background-color: var(--bg-main);
   color: var(--text-main);
-  font-size: 0.95rem;
+  font-size: 0.9rem;
   transition: var(--transition);
 }
 
@@ -446,27 +403,114 @@ select {
   box-shadow: 0 0 0 3px rgba(22, 163, 74, 0.15);
 }
 
-/* Animations */
-@keyframes fadeIn {
-  from {
-    opacity: 0;
-  }
-
-  to {
-    opacity: 1;
-  }
+/* Edit Card Components */
+.edit-card-header {
+  padding-bottom: 0.5rem;
+  margin-bottom: 0.75rem;
+  border-bottom: 1px solid var(--border-color);
 }
 
-@keyframes scaleIn {
-  from {
-    opacity: 0;
-    transform: scale(0.95);
-  }
+.edit-card-title {
+  color: var(--text-main);
+  font-weight: 700;
+  font-size: 1rem;
+}
 
-  to {
-    opacity: 1;
-    transform: scale(1);
-  }
+.edit-error-banner {
+  color: var(--danger-red);
+  font-size: 0.8rem;
+  background-color: var(--danger-light);
+  padding: 0.4rem 0.6rem;
+  border-radius: var(--radius-sm);
+  margin-bottom: 0.5rem;
+}
+
+.edit-card-form {
+  display: flex;
+  flex-direction: column;
+  flex: 1;
+  min-height: 0;
+}
+
+.edit-card-body {
+  flex: 1;
+  overflow-y: auto;
+  padding-right: 0.25rem;
+  margin-bottom: 0.75rem;
+}
+
+/* Custom Scrollbar */
+.edit-card-body::-webkit-scrollbar { width: 5px; }
+.edit-card-body::-webkit-scrollbar-track { background: var(--primary-green-light); border-radius: 4px; }
+.edit-card-body::-webkit-scrollbar-thumb { background: var(--primary-green-border); border-radius: 4px; }
+.edit-card-body::-webkit-scrollbar-thumb:hover { background: var(--primary-green); }
+
+.form-section {
+  margin-bottom: 0.85rem;
+}
+
+.form-section .section-title {
+  font-size: 0.75rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  color: var(--primary-green);
+  margin-bottom: 0.4rem;
+}
+
+.row-group {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 0.5rem;
+}
+
+.days-picker {
+  display: flex;
+  gap: 0.25rem;
+  justify-content: space-between;
+  margin-top: 0.25rem;
+}
+
+.day-pill {
+  width: 28px;
+  height: 28px;
+  border-radius: 50%;
+  border: 1px solid var(--border-color);
+  background: var(--bg-main);
+  color: var(--text-muted);
+  font-size: 0.75rem;
+  font-weight: 600;
+  transition: all 0.2s ease;
+}
+.day-pill:hover {
+  border-color: var(--primary-green);
+  color: var(--primary-green);
+}
+.day-pill.selected {
+  background: var(--primary-green);
+  color: white;
+  border-color: var(--primary-green);
+}
+
+.toggle-group {
+  margin-top: 0.5rem;
+}
+
+.toggle-label {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  font-size: 0.8rem;
+  color: var(--text-main);
+  cursor: pointer;
+}
+
+.edit-card-actions {
+  display: flex;
+  gap: 0.5rem;
+  justify-content: flex-end;
+  padding-top: 0.5rem;
+  border-top: 1px solid var(--border-color);
 }
 
 .volume-input-group {
@@ -486,7 +530,61 @@ select {
   font-weight: 600;
 }
 
-.edit-delete-container {
-  display: flex;
-  column-gap: 10px;
+/* ==========================================
+   7. MODAL OVERLAYS
+   ========================================== */
+.modal-overlay {
+  position: fixed;
+  inset: 0;
+  background-color: rgba(15, 23, 42, 0.4);
+  backdrop-filter: blur(4px);
+  z-index: 50;
+  padding: 1rem;
+  animation: fadeIn 0.15s ease-out;
+}
+
+.modal-content {
+  background-color: var(--bg-card);
+  border-radius: var(--radius-lg);
+  box-shadow: var(--shadow-lg);
+  width: 100%;
+  max-width: 480px;
+  padding: 2rem;
+  border: 1px solid var(--border-color);
+  animation: scaleIn 0.15s ease-out;
+}
+
+.modal-header {
+  margin-bottom: 1.5rem;
+}
+
+.modal-title {
+  font-size: 1.25rem;
+  font-weight: 700;
+}
+
+.close-btn {
+  font-size: 1.25rem;
+  color: var(--text-muted);
+  width: 32px;
+  height: 32px;
+  border-radius: var(--radius-full);
+  transition: var(--transition);
+}
+.close-btn:hover {
+  background: var(--bg-main);
+  color: var(--text-main);
+}
+
+/* ==========================================
+   8. ANIMATIONS
+   ========================================== */
+@keyframes fadeIn {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+
+@keyframes scaleIn {
+  from { opacity: 0; transform: scale(0.95); }
+  to { opacity: 1; transform: scale(1); }
 }
